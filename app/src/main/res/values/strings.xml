@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tasks App</string>
+    <string name="add_task">Add Task</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_description">Task Description</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="mark_complete">Mark Complete</string>
+    <string name="mark_incomplete">Mark Incomplete</string>
+    <string name="no_tasks">No tasks yet. Add one to get started!</string>
+    <string name="task_completed">Task completed</string>
+    <string name="task_deleted">Task deleted</string>
+    <string name="error_empty_title">Task title cannot be empty</string>
+    <string name="confirm_delete">Are you sure you want to delete this task?</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!--
+   Set to true if the app's data should be backed up and restored by the
+   device's backup service. Set to false if the app should not be backed up.
+    -->
+</full-backup-content>
