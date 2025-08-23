@@ -22,10 +22,10 @@ class TaskRepository(private val taskDao: TaskDao) {
     suspend fun deleteTask(task: Task) = taskDao.deleteTask(task)
     
     suspend fun markTaskComplete(task: Task) {
-        taskDao.updateTaskStatus(task.id, true)
+        taskDao.updateTaskStatus(task.id, true, System.currentTimeMillis())
     }
     
     suspend fun markTaskIncomplete(task: Task) {
-        taskDao.updateTaskStatus(task.id, false)
+        taskDao.updateTaskStatus(task.id, false, System.currentTimeMillis())
     }
 }

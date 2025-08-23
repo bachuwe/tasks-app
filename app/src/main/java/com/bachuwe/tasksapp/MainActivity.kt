@@ -9,6 +9,7 @@ import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bachuwe.tasksapp.data.Task
 import com.bachuwe.tasksapp.databinding.ActivityMainBinding
@@ -59,14 +60,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
+    private var currentTasksObserver: LiveData<List<Task>>? = null
+    
     private fun observeTasks() {
-        val tasksLiveData = if (showCompletedTasks) {
+        // Remove previous observer if exists
+        currentTasksObserver?.removeObservers(this)
+        
+        // Get the appropriate LiveData based on current view mode
+        currentTasksObserver = if (showCompletedTasks) {
             taskViewModel.completedTasks
         } else {
             taskViewModel.incompleteTasks
         }
         
-        tasksLiveData.observe(this) { tasks ->
+        // Observe the new LiveData
+        currentTasksObserver?.observe(this) { tasks ->
             taskAdapter.submitList(tasks)
             updateEmptyState(tasks.isEmpty())
         }
@@ -149,9 +157,9 @@ class MainActivity : AppCompatActivity() {
             R.id.action_show_completed -> {
                 showCompletedTasks = !showCompletedTasks
                 item.title = if (showCompletedTasks) {
-                    "Show Active"
+                    getString(R.string.show_active)
                 } else {
-                    "Show Completed"
+                    getString(R.string.show_completed)
                 }
                 observeTasks()
                 true
