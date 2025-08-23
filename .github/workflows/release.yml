@@ -1,0 +1,148 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: 'Version name (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    name: Build Release APK
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Cache Gradle packages
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build Debug APK (always available)
+      run: ./gradlew assembleDebug --stacktrace
+
+    - name: Build Release APK
+      run: ./gradlew assembleRelease --stacktrace
+    
+    - name: Get version name
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "version=${{ github.event.inputs.version_name }}" >> $GITHUB_OUTPUT
+        else
+          echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Upload Debug APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: debug-apk-${{ steps.version.outputs.version }}
+        path: app/build/outputs/apk/debug/*.apk
+
+    - name: Upload Release APKs
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apks-${{ steps.version.outputs.version }}
+        path: |
+          app/build/outputs/apk/release/*.apk
+
+    - name: Create Release
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          app/build/outputs/apk/debug/app-debug.apk
+          app/build/outputs/apk/release/app-release.apk
+        body: |
+          ## Tasks App ${{ steps.version.outputs.version }}
+          
+          ### Installation Files
+          
+          **Ready to install on your Android device:**
+          - 📱 **app-debug.apk** - Debug version (6MB, good for development/testing)
+          - 📱 **app-release.apk** - Release version (5MB, recommended for regular use)
+          
+          Both APKs are signed and ready for installation!
+          
+          ### How to Install
+          
+          1. Download either APK file (app-release.apk recommended)
+          2. On your Android device, go to Settings > Security > Unknown Sources and enable it
+          3. Transfer the APK to your device and tap to install
+          4. Follow the installation prompts
+          5. You can now use the Tasks App!
+          
+          ### Features
+          - ✅ Add, edit, and delete tasks
+          - ✅ Mark tasks as complete/incomplete  
+          - ✅ Filter between active and completed tasks
+          - ✅ Material Design UI
+          - ✅ Local data storage with Room database
+          
+          Built with Android API 21+ (Android 5.0 and higher)
+        draft: false
+        prerelease: false
+
+    - name: Create Manual Release (workflow_dispatch)
+      if: github.event_name == 'workflow_dispatch'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.event.inputs.version_name }}
+        name: Tasks App ${{ github.event.inputs.version_name }}
+        files: |
+          app/build/outputs/apk/debug/app-debug.apk
+          app/build/outputs/apk/release/app-release.apk
+        body: |
+          ## Tasks App ${{ github.event.inputs.version_name }}
+          
+          ### Installation Files
+          
+          **Ready to install on your Android device:**
+          - 📱 **app-debug.apk** - Debug version (6MB, good for development/testing)
+          - 📱 **app-release.apk** - Release version (5MB, recommended for regular use)
+          
+          Both APKs are signed and ready for installation!
+          
+          ### How to Install
+          
+          1. Download either APK file (app-release.apk recommended)
+          2. On your Android device, go to Settings > Security > Unknown Sources and enable it
+          3. Transfer the APK to your device and tap to install
+          4. Follow the installation prompts
+          5. You can now use the Tasks App!
+          
+          ### Features
+          - ✅ Add, edit, and delete tasks
+          - ✅ Mark tasks as complete/incomplete  
+          - ✅ Filter between active and completed tasks
+          - ✅ Material Design UI
+          - ✅ Local data storage with Room database
+          
+          Built with Android API 21+ (Android 5.0 and higher)
+        draft: false
+        prerelease: false
