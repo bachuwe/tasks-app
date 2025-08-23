@@ -18,10 +18,36 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            // Debug signing config (default)
+        }
+        release {
+            // Release signing - can be configured with environment variables or keystore
+            if (project.hasProperty('TASKS_KEYSTORE_FILE')) {
+                storeFile file(TASKS_KEYSTORE_FILE)
+                storePassword TASKS_KEYSTORE_PASSWORD
+                keyAlias TASKS_KEY_ALIAS
+                keyPassword TASKS_KEY_PASSWORD
+            } else {
+                // Fallback to debug signing if no release keystore is configured
+                storeFile signingConfigs.debug.storeFile
+                storePassword signingConfigs.debug.storePassword
+                keyAlias signingConfigs.debug.keyAlias
+                keyPassword signingConfigs.debug.keyPassword
+            }
+        }
+    }
+    
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Use debug signing for release if no proper keystore is configured
+            signingConfig signingConfigs.release
         }
     }
     

@@ -118,6 +118,24 @@ The following workflows are available:
 - **Build and Test**: Simple workflow for quick builds and unit tests  
 - **Tests**: Focused testing with enhanced reporting
 
+## Installation
+
+### Install on Your Android Device
+
+**Quick Install:**
+1. Go to [Releases](https://github.com/bachuwe/tasks-app/releases) and download the latest `app-release.apk`
+2. On your Android device, enable "Unknown Sources" in Settings → Security
+3. Install the downloaded APK file
+4. Open the Tasks App and start organizing your tasks!
+
+**Alternative Options:**
+- Download from [GitHub Actions artifacts](https://github.com/bachuwe/tasks-app/actions) for the latest builds
+- Build from source using the development setup instructions below
+
+📱 **For detailed installation instructions, troubleshooting, and more options, see [INSTALLATION.md](INSTALLATION.md)**
+
+**System Requirements:** Android 5.0+ (API 21), ~5MB storage space
+
 ## Dependencies
 
 ### Core Dependencies
