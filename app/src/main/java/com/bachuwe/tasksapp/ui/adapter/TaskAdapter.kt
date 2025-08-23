@@ -39,6 +39,8 @@ class TaskAdapter(
         private val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
 
         fun bind(task: Task) {
+            // Remove listener to prevent triggering during binding
+            checkBoxComplete.setOnCheckedChangeListener(null)
             checkBoxComplete.isChecked = task.isCompleted
             textViewTitle.text = task.title
             

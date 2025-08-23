@@ -84,6 +84,12 @@ class MainActivity : AppCompatActivity() {
         if (isEmpty) {
             binding.recyclerViewTasks.visibility = View.GONE
             binding.textViewEmptyState.visibility = View.VISIBLE
+            // Set appropriate empty state message based on current view
+            binding.textViewEmptyState.text = if (showCompletedTasks) {
+                getString(R.string.no_completed_tasks)
+            } else {
+                getString(R.string.no_tasks)
+            }
         } else {
             binding.recyclerViewTasks.visibility = View.VISIBLE
             binding.textViewEmptyState.visibility = View.GONE
