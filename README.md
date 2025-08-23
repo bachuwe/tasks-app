@@ -1,5 +1,9 @@
 # Tasks App
 
+[![CI](https://github.com/bachuwe/tasks-app/actions/workflows/ci.yml/badge.svg)](https://github.com/bachuwe/tasks-app/actions/workflows/ci.yml)
+[![Build and Test](https://github.com/bachuwe/tasks-app/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/bachuwe/tasks-app/actions/workflows/build-and-test.yml)
+[![Tests](https://github.com/bachuwe/tasks-app/actions/workflows/tests.yml/badge.svg)](https://github.com/bachuwe/tasks-app/actions/workflows/tests.yml)
+
 A modern Android application for managing personal tasks and to-do lists. Built with Kotlin using MVVM architecture and Room database for local persistence.
 
 ## Features
@@ -104,6 +108,15 @@ app/
 ```bash
 ./gradlew connectedAndroidTest
 ```
+
+### Continuous Integration
+
+This project uses GitHub Actions for automated building and testing. See [README-ACTIONS.md](README-ACTIONS.md) for detailed information about the CI/CD workflows.
+
+The following workflows are available:
+- **CI**: Complete pipeline with unit tests, build, and instrumented tests
+- **Build and Test**: Simple workflow for quick builds and unit tests  
+- **Tests**: Focused testing with enhanced reporting
 
 ## Dependencies
 
